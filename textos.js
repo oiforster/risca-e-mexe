@@ -17,10 +17,10 @@
 
   const TEXTOS = {
     pt: {
-      navIndice: 'Índice', navMesa: 'Mesa de combinação', navRefs: 'Referências', navContribuir: 'Contribuir: em breve no GitHub',
+      navIndice: 'Índice', navMesa: 'Mesa de combinação', navRefs: 'Referências', navContribuir: 'Contribuir no GitHub',
       lingua: 'Língua',
       rodapeFeito: 'Risca & Mexe · código aberto, licença MIT · feito pela FORSTER em Igrejinha, Rio Grande do Sul, Brasil',
-      rodapeEstilo: 'Quer mandar um estilo novo? O passo a passo sai em breve no GitHub.',
+      rodapeEstilo: 'Quer mandar um estilo novo? O passo a passo está no GitHub.',
       rodapeCredito: 'A receita do pontilhismo usa ideias da skill de pontilhismo de Fernando Araújo (BRABO, licença MIT).',
       visual: 'Visual', movimento: 'Movimento', semModelo: 'sem modelo',
       frase: (v, m) => `${v} com ${m}`,
@@ -122,10 +122,10 @@
     },
 
     en: {
-      navIndice: 'Index', navMesa: 'Combination table', navRefs: 'References', navContribuir: 'Contribute: coming soon on GitHub',
+      navIndice: 'Index', navMesa: 'Combination table', navRefs: 'References', navContribuir: 'Contribute on GitHub',
       lingua: 'Language',
       rodapeFeito: 'Risca & Mexe · open source, MIT license · made by FORSTER in Igrejinha, Rio Grande do Sul, Brazil',
-      rodapeEstilo: 'Want to send a new style? The step-by-step guide is coming soon on GitHub.',
+      rodapeEstilo: 'Want to send a new style? The step-by-step guide is on GitHub.',
       rodapeCredito: 'The pointillism recipe uses ideas from Fernando Araújo’s pointillism skill (BRABO, MIT license).',
       visual: 'Visual', movimento: 'Motion', semModelo: 'no template',
       frase: (v, m) => `${v} with ${m}`,
@@ -223,10 +223,10 @@
     },
 
     es: {
-      navIndice: 'Índice', navMesa: 'Mesa de combinación', navRefs: 'Referencias', navContribuir: 'Contribuir: pronto en GitHub',
+      navIndice: 'Índice', navMesa: 'Mesa de combinación', navRefs: 'Referencias', navContribuir: 'Contribuir en GitHub',
       lingua: 'Idioma',
       rodapeFeito: 'Risca & Mexe · código abierto, licencia MIT · hecho por FORSTER en Igrejinha, Rio Grande do Sul, Brasil',
-      rodapeEstilo: '¿Quieres enviar un estilo nuevo? El paso a paso sale pronto en GitHub.',
+      rodapeEstilo: '¿Quieres enviar un estilo nuevo? El paso a paso está en GitHub.',
       rodapeCredito: 'La receta del puntillismo usa ideas de la skill de puntillismo de Fernando Araújo (BRABO, licencia MIT).',
       visual: 'Visual', movimento: 'Movimiento', semModelo: 'sin modelo',
       frase: (v, m) => `${v} con ${m}`,
