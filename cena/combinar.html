@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Combinar visual e movimento</title>
+<!-- Risca & Mexe: uma combinação de visual e movimento. Abrir combinar.html?v=9&m=2 (visual de 1 a 11, movimento de 0 a 15).
+     Para gravar em vídeo: node ferramentas/gravar.mjs --v 9 --m 2 --saida cena.mp4 -->
+<link rel="stylesheet" href="catalogo.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+<script src="nucleo.js"></script>
+<script src="visuais.js"></script>
+<script src="movimentos.js"></script>
+</head>
+<body>
+<div id="palco"></div>
+<script>Catalogo.montar();   // lê ?v=9&m=2 do endereço</script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+/* catalogo.css — Risca & Mexe: o palco de 1080 × 1920 das cenas do catálogo (nucleo.js põe os dois canvas dentro) */
+html, body { margin: 0; background: #000; overflow: hidden; }
+#palco { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 0 0; perspective: 1700px; overflow: hidden; }
+#palco canvas { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+#plano { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-style: preserve-3d; }

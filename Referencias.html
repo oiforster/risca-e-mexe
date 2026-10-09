@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-t="tituloRefs">Da referência ao código · Risca &amp; Mexe</title>
+<meta name="description" content="Um índice aberto de estilos de animação. Toda animação são duas escolhas: como ela é desenhada e como ela se mexe. Escolha uma de cada, veja ao vivo e leve a receita para a IA.">
+<meta property="og:title" content="Risca &amp; Mexe">
+<meta property="og:description" content="Um índice aberto de estilos de animação: escolha como desenhar e como mexer, e veja ao vivo.">
+<meta property="og:image" content="https://riscaemexe.com.br/img/compartilhar.jpg">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="img/icone.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Caveat:wght@500;600&family=Courier+Prime:wght@400;700&display=swap">
+<link rel="stylesheet" href="estilo.css">
+<script src="textos.js"></script>
+<style>
+  /* filmes de verdade lidos nos dois eixos: o filme à esquerda, a leitura à direita, numa folha por filme */
+  .abre { position: relative; background: var(--laranja-fundo); overflow: hidden; padding-bottom: 46px; }
+  .abre .cabeca { position: relative; max-width: 1380px; margin: 0 auto; padding: 14px 28px 0; display: grid; grid-template-columns: 1fr minmax(240px, 340px); gap: 24px; align-items: end; }
+  .abre h1 { font-size: clamp(54px, 8vw, 128px); text-wrap: balance; }
+  .abre .cabeca p { font-family: var(--f-titulo); font-weight: 800; font-size: 20px; line-height: 1.12; margin: 0 0 10px; }
+  .abre .mao { color: var(--tinta); font-size: 24px; transform: rotate(-2deg); margin-top: 8px; }
+  .lista { max-width: 1380px; margin: 0 auto; padding: 50px 28px 30px; display: grid; gap: 46px; }
+  .folha { position: relative; background: var(--branco); box-shadow: 0 14px 40px rgba(26,25,22,.16); display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); }
+  .folha:nth-child(even) { transform: rotate(.35deg); }
+  .folha:nth-child(odd) { transform: rotate(-.3deg); }
+  .folha { scroll-margin-top: 28px; }
+  .folha:target { outline: 3px solid var(--laranja); outline-offset: 8px; }
+  .filme { padding: 22px; border-right: 1px solid #e3ded2; min-width: 0; }
+  .tela { position: relative; aspect-ratio: 16 / 9; background: #111; overflow: hidden; }
+  .tela img, .tela iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; object-fit: cover; }
+  .tela button { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(26,25,22,.25); border: 0; cursor: pointer; }
+  .tela button span { font-family: var(--f-maquina); font-weight: 700; font-size: 15px; background: var(--branco); color: var(--tinta); padding: 10px 16px; border: 2px solid var(--tinta); box-shadow: 4px 4px 0 var(--tinta); }
+  .credito-filme { margin-top: 12px; font-family: var(--f-maquina); font-size: 13.5px; line-height: 1.45; }
+  .credito-filme a { text-underline-offset: 3px; }
+  .leitura { padding: 24px 28px 28px; display: grid; gap: 14px; align-content: start; min-width: 0; }
+  .leitura .n { font-weight: 800; font-size: 13px; }
+  .leitura h2 { font-family: var(--f-titulo); font-weight: 900; font-size: 30px; letter-spacing: -0.03em; line-height: 1; margin: 0; }
+  .par { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  .par b { font-family: var(--f-titulo); font-weight: 900; font-size: 52px; letter-spacing: -0.04em; line-height: .9; color: var(--laranja); }
+  .par span { font-family: var(--f-maquina); font-size: 15px; }
+  .leitura p { margin: 0; max-width: 56ch; }
+  .tambem { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 14px; }
+  .chip { font-family: var(--f-maquina); font-size: 13.5px; background: var(--branco); border: 1.5px solid var(--tinta); padding: 4px 9px; text-decoration: none; }
+  .chip:hover { background: var(--tinta); color: var(--branco); }
+  .momentos { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+  .momentos button { width: 100%; display: grid; grid-template-columns: 54px 1fr; gap: 8px; align-items: baseline; text-align: left; background: none; border: 0; border-bottom: 1px dashed var(--linha); padding: 6px 2px; cursor: pointer; font: inherit; color: inherit; }
+  .momentos b { font-family: var(--f-maquina); font-weight: 700; color: var(--laranja); }
+  .momentos button:hover span { text-decoration: underline; }
+  .acoes { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 6px; }
+  .falta { max-width: 1380px; margin: 0 auto; padding: 40px 28px 90px; }
+  .falta h2 { font-size: clamp(42px, 5.5vw, 84px); margin-bottom: 10px; }
+  .falta > p { max-width: 62ch; margin: 0 0 26px; }
+  .faltam { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 22px; }
+  .faltam div { background: var(--branco); border: 1.5px dashed var(--tinta); padding: 18px 20px; display: grid; gap: 8px; align-content: start; }
+  .faltam h3 { font-family: var(--f-titulo); font-weight: 900; font-size: 24px; letter-spacing: -0.02em; margin: 0; }
+  .faltam p { margin: 0; font-size: 15px; }
+  .faltam small { font-family: var(--f-maquina); font-size: 13px; }
+  @media (max-width: 900px) {
+    .abre .cabeca { grid-template-columns: 1fr; }
+    .folha { grid-template-columns: 1fr; transform: none !important; }
+    .filme { border-right: 0; border-bottom: 1px solid #e3ded2; }
+    .par b { font-size: 42px; }
+  }
+</style>
+</head>
+<body class="papel-fundo">
+<section class="abre">
+  <div class="grao"></div>
+  <header class="topo">
+    <nav><a href="index.html" data-t="navIndice">Índice</a><a href="Mesa.html" data-t="navMesa">Mesa de combinação</a><a href="Referencias.html" aria-current="page" data-t="navRefs">Referências</a><span data-t="navContribuir">Contribuir: em breve no GitHub</span></nav>
+    <div class="linguas" aria-label="Língua" data-ta="aria-label:lingua"><a href="Referencias.html" hreflang="pt-BR" data-lingua="pt" aria-current="true">PT</a><a href="Referencias.html?lang=en" hreflang="en" data-lingua="en">EN</a><a href="Referencias.html?lang=es" hreflang="es" data-lingua="es">ES</a></div>
+  </header>
+  <div class="cabeca">
+    <h1 class="titulo" data-t="refsH1">Da referência ao código</h1>
+    <div>
+      <p data-t="refsLead">Filmes de verdade, lidos nos dois eixos. Toca o filme, vê o que ele usa e leva a mesma ideia para a mesa.</p>
+      <p class="mao" data-t="refsMao">os filmes tocam pelo YouTube, com o crédito de quem fez</p>
+    </div>
+  </div>
+</section>
+
+<main class="lista" id="lista"></main>
+
+<section class="falta" aria-label="O que ainda falta no catálogo" data-ta="aria-label:faltaRotulo">
+  <h2 class="titulo" data-t="faltaH2">O que esses filmes fazem e o catálogo ainda não tem</h2>
+  <p data-t="faltaLead">Movimentos que aparecem nas referências e ainda não viraram item do Risca &amp; Mexe. Cada um pode virar um M novo, feito por nós ou por quem quiser contribuir.</p>
+  <div class="faltam" id="faltam"></div>
+</section>
+
+<footer class="rodape">
+  <span data-t="rodapeFeito">Risca &amp; Mexe · código aberto, licença MIT · feito pela FORSTER em Igrejinha, Rio Grande do Sul, Brasil</span>
+  <span data-t="rodapeEstilo">Quer mandar um estilo novo? O passo a passo sai em breve no GitHub.</span>
+  <span class="credito" data-t="rodapeCredito">A receita do pontilhismo usa ideias da skill de pontilhismo de Fernando Araújo (BRABO, licença MIT).</span>
+</footer>
+
+<script src="itens.js"></script>
+<script src="referencias.js"></script>
+<script src="traducoes.js"></script>
+<script>
+aplicarLingua(LINGUA); aplicarTextos();   // antes de ler os dados: o aplicarLingua troca a lista "faltam" inteira
+const { visuais, movimentos } = window.MI, { filmes, faltam } = window.REFS;
+const nomeV = n => (visuais.find(i => i.n === n) || {}).nome, nomeM = n => (movimentos.find(i => i.n === n) || {}).nome;
+const tempo = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+
+document.getElementById('lista').innerHTML = filmes.map((f, i) => `
+  <article class="folha" id="filme-${i + 1}">
+    <div class="filme">
+      <div class="tela" data-id="${f.id}">
+        <img src="https://i.ytimg.com/vi/${f.id}/hqdefault.jpg" alt="" loading="lazy">
+        <button type="button" data-ini="0"><span>${T.tocar}</span></button>
+      </div>
+      <p class="credito-filme">${f.titulo} · ${f.autor}<br>${T.noCanal(f.canal)}${f.motionIndex ? ` · ${T.encontradoNo} <a href="https://www.motionindex.io/" target="_blank" rel="noopener">Motion Index</a>` : ''}</p>
+    </div>
+    <div class="leitura">
+      <span class="n">${T.refN(i + 1, filmes.length)}</span>
+      <h2>${f.titulo}</h2>
+      <div class="par"><b>V${f.v} × M${f.m}</b><span>${T.frase(nomeV(f.v), minusc(nomeM(f.m)))}</span></div>
+      <p>${f.diz}</p>
+      ${f.tambem && f.tambem.length ? `<div class="tambem">${T.tambem} ${f.tambem.map(n => `<a class="chip" href="Item.html?id=M${n}"><b>M${n}</b> ${nomeM(n)}</a>`).join('')}</div>` : ''}
+      <ul class="momentos">${f.momentos.map(([s, t]) => `<li><button type="button" data-ini="${s}"><b>${tempo(s)}</b><span>${t}</span></button></li>`).join('')}</ul>
+      <div class="acoes"><a class="botao" href="Mesa.html?v=${f.v}&m=${f.m}">${T.abrirNaMesa(`V${f.v} × M${f.m}`)}</a></div>
+    </div>
+  </article>`).join('');
+
+document.getElementById('faltam').innerHTML = faltam.map(x => `<div><h3>${x.nome}</h3><p>${x.oque}</p><small>${T.apareceEm} ${x.visto}</small></div>`).join('');
+
+// chegando por #filme-N (do índice ou de uma página de item): vai direto para a folha, que fica marcada
+const alvo = location.hash && document.getElementById(location.hash.slice(1));
+if (alvo) requestAnimationFrame(() => window.scrollTo(0, alvo.getBoundingClientRect().top + scrollY - 28));
+
+// o filme só carrega quando a pessoa pede; os momentos pulam direto no trecho
+function tocar(folha, ini) {
+  const tela = folha.querySelector('.tela');
+  tela.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${tela.dataset.id}?autoplay=1&start=${Math.floor(ini)}&rel=0" title="${T.filmeTitulo}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+}
+document.getElementById('lista').addEventListener('click', e => {
+  const b = e.target.closest('button[data-ini]'); if (!b) return;
+  const folha = b.closest('.folha'); tocar(folha, +b.dataset.ini);
+  if (b.closest('.momentos')) { const t = folha.querySelector('.tela').getBoundingClientRect(); window.scrollTo({ top: t.top + scrollY - (innerHeight - t.height) / 2, behavior: 'smooth' }); }
+});
+linkar();
+</script>
+</body>
+</html>

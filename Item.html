@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Risca &amp; Mexe · item</title>
+<meta name="description" content="Um índice aberto de estilos de animação. Toda animação são duas escolhas: como ela é desenhada e como ela se mexe. Escolha uma de cada, veja ao vivo e leve a receita para a IA.">
+<meta property="og:title" content="Risca &amp; Mexe">
+<meta property="og:description" content="Um índice aberto de estilos de animação: escolha como desenhar e como mexer, e veja ao vivo.">
+<meta property="og:image" content="https://riscaemexe.com.br/img/compartilhar.jpg">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="img/icone.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Caveat:wght@500;600&family=Courier+Prime:wght@400;700&display=swap">
+<link rel="stylesheet" href="estilo.css">
+<script src="textos.js"></script>
+<style>
+  /* página dupla: texto à esquerda, o vídeo colado à direita */
+  .folha { max-width: 1380px; margin: 0 auto; padding: 10px 28px 80px; }
+  .dupla { display: grid; grid-template-columns: 1fr 1fr; gap: 0; background: var(--branco); box-shadow: 0 18px 50px rgba(26,25,22,.18); min-height: 760px; }
+  .pagina { position: relative; padding: 46px 48px 54px; overflow: hidden; }
+  .pagina + .pagina { border-left: 1px solid #ddd8cc; }
+  .pagina.laranja { background: var(--laranja); }
+  .cab { display: flex; justify-content: space-between; font-weight: 800; font-size: 13px; margin-bottom: 36px; position: relative; }
+  .num-grande { font-size: clamp(120px, 14vw, 210px); color: var(--laranja); }
+  h1.titulo { font-size: clamp(54px, 6.4vw, 96px); margin-top: 6px; text-wrap: balance; hyphens: auto; overflow-wrap: break-word; }
+  .texto { columns: 2; column-gap: 28px; margin-top: 34px; font-size: 15.5px; max-width: 640px; }
+  .texto p { margin: 0 0 12px; break-inside: avoid; }
+  .texto .abre { font-weight: 800; font-size: 17px; line-height: 1.35; }
+  .grande { position: relative; width: min(330px, 70%); margin: 30px auto 0; transform: rotate(2.5deg); }
+  .grande .polaroide { position: relative; width: 100%; padding: 14px 14px 46px; }
+  .grande .legenda { font-size: 16px; bottom: 14px; }
+  .sem-modelo { aspect-ratio: 9 / 16; display: grid; place-items: center; font-family: var(--f-maquina); font-size: 16px; }
+  /* a anotação fica embaixo da polaroide, sobre o laranja, e não encosta no número */
+  .pagina.laranja .nota { position: relative; max-width: 300px; margin: 30px auto 0; text-align: center; transform: rotate(-2deg); text-wrap: balance; }
+  .abrir { position: relative; text-align: center; margin: 26px 0 0; }
+  .combina { margin-top: 44px; position: relative; }
+  .combina h2 { font-family: var(--f-titulo); font-weight: 900; font-size: 30px; letter-spacing: -0.03em; margin: 0 0 14px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { font-family: var(--f-maquina); font-size: 14px; background: var(--branco); border: 1.5px solid var(--tinta); padding: 6px 10px; text-decoration: none; }
+  .chip b { font-weight: 700; }
+  .chip:hover { background: var(--tinta); color: var(--branco); }
+  .passa { display: flex; justify-content: space-between; gap: 16px; margin-top: 26px; font-family: var(--f-maquina); }
+  .passa a:last-child { text-align: right; }
+  /* como fazer: a receita do item, para animar sem IA */
+  .receita { display: grid; grid-template-columns: minmax(220px, .55fr) 1.45fr; gap: 28px 56px; align-items: start; margin-top: 64px; }
+  .receita h2 { font-size: clamp(48px, 6vw, 92px); margin-bottom: 18px; }
+  .receita .lead, .vida .lead { margin: 0; max-width: 30ch; font-weight: 800; font-size: 17px; line-height: 1.35; text-wrap: pretty; }
+  .folha-receita { position: relative; background: var(--branco); padding: 32px 36px 36px; box-shadow: 0 14px 34px rgba(26,25,22,.16); transform: rotate(-.5deg); }
+  .regras { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; max-width: 72ch; }
+  .regras > li { position: relative; padding-left: 26px; line-height: 1.55; text-wrap: pretty; }
+  .regras > li::before { content: ""; position: absolute; left: 2px; top: .55em; width: 10px; height: 10px; background: var(--laranja); }
+  .regras ol { margin: 10px 0 0; padding-left: 24px; display: grid; gap: 6px; }
+  .regras ol li::marker { font-family: var(--f-titulo); font-weight: 900; }
+  .folha-receita .solta { margin: 0; max-width: 64ch; line-height: 1.55; }
+  .folha-receita code { font-family: var(--f-maquina); font-size: .95em; background: var(--papel); padding: 0 .3em; }
+  .cor { white-space: nowrap; font-family: var(--f-maquina); font-size: .92em; }
+  .cor i { display: inline-block; width: .85em; height: .85em; margin-right: .3em; vertical-align: -.08em; border: 1px solid rgba(26,25,22,.35); }
+  /* na vida real: os filmes de referências.js que usam este movimento, como polaroides deitadas */
+  .vida { display: grid; grid-template-columns: minmax(220px, .55fr) 1.45fr; gap: 28px 56px; align-items: start; margin-top: 64px; }
+  .vida h2 { font-size: clamp(48px, 6vw, 92px); margin-bottom: 18px; }
+  .vida-nota { margin: 12px 0 0; max-width: 34ch; font-family: var(--f-maquina); font-size: 13.5px; line-height: 1.45; text-wrap: pretty; }
+  .filmes { display: flex; flex-wrap: wrap; gap: 30px 24px; padding-top: 6px; }
+  .cartao-filme { display: grid; gap: 4px; align-content: start; width: min(100%, 280px); padding: 10px 10px 14px; background: var(--branco); box-shadow: 0 10px 26px rgba(26,25,22,.2); text-decoration: none; }
+  .cartao-filme .quadro { position: relative; aspect-ratio: 16 / 9; background: #111; overflow: hidden; margin-bottom: 6px; }
+  .cartao-filme img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .cartao-filme b { font-family: var(--f-titulo); font-weight: 800; font-size: 16px; line-height: 1.15; text-wrap: balance; }
+  .cartao-filme span, .cartao-filme em { font-family: var(--f-maquina); font-size: 13px; font-style: normal; }
+  .cartao-filme em { font-weight: 700; display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; }
+  .cartao-filme .vm { white-space: nowrap; }
+  .cartao-filme:hover b { text-decoration: underline; text-underline-offset: 3px; }
+  @media (max-width: 900px) {
+    .folha { padding: 10px 12px 60px; }
+    .dupla { grid-template-columns: 1fr; }
+    .pagina { padding: 32px 22px 40px; }
+    .pagina + .pagina { border-left: 0; }
+    .texto { columns: 1; }
+    h1.titulo { font-size: clamp(40px, 11vw, 96px); }
+    .receita { grid-template-columns: 1fr; margin-top: 44px; }
+    .vida { grid-template-columns: 1fr; margin-top: 44px; }
+    .cartao-filme { transform: none !important; }
+    .folha-receita { padding: 26px 20px 28px; transform: none; }
+  }
+</style>
+</head>
+<body class="papel-fundo">
+<header class="topo">
+  <nav><a href="index.html" data-t="navIndice">Índice</a><a href="Mesa.html" data-t="navMesa">Mesa de combinação</a><a href="Referencias.html" data-t="navRefs">Referências</a><span data-t="navContribuir">Contribuir: em breve no GitHub</span></nav>
+  <div class="linguas" aria-label="Língua" data-ta="aria-label:lingua"><a href="Item.html" hreflang="pt-BR" data-lingua="pt" aria-current="true">PT</a><a href="Item.html?lang=en" hreflang="en" data-lingua="en">EN</a><a href="Item.html?lang=es" hreflang="es" data-lingua="es">ES</a></div>
+</header>
+<main class="folha">
+  <div class="dupla">
+    <section class="pagina">
+      <div class="cab"><span id="capitulo"></span><span>Risca &amp; Mexe</span></div>
+      <div class="titulo num-grande" id="numero"></div>
+      <h1 class="titulo" id="nome"></h1>
+      <div class="texto">
+        <p class="abre" id="oque"></p>
+        <p id="explica"></p>
+        <p><span data-t="ondeCabe">Onde cabe:</span> <mark id="cabe"></mark></p>
+      </div>
+      <div class="combina" id="combina">
+        <h2 id="combinaTitulo"></h2>
+        <div class="chips" id="chips"></div>
+      </div>
+      <div class="passa"><a id="ant" href="#"></a><a id="prox" href="#"></a></div>
+    </section>
+    <section class="pagina laranja">
+      <div class="grao"></div>
+      <div class="cab"><span id="eixo"></span><span id="pag"></span></div>
+      <div class="grande">
+        <div class="polaroide"><video id="video" muted loop playsinline></video><div class="sem-modelo quadriculado" id="semModelo" hidden data-t="semModelo">sem modelo</div><span class="legenda" id="legenda"></span>
+          <i class="fita" style="left:34px;top:-13px;transform:rotate(-6deg)"></i><i class="fita" style="right:26px;bottom:-10px;transform:rotate(8deg)"></i></div>
+      </div>
+      <p class="mao nota" id="nota"></p>
+      <p class="abrir" id="abrir"><a class="botao" id="abrirMesa" href="Mesa.html" data-t="abrirMesa">Abrir na mesa de combinação</a></p>
+    </section>
+  </div>
+  <section class="vida" id="vida" aria-labelledby="naVidaReal" hidden>
+    <div>
+      <h2 class="titulo" id="naVidaReal" data-t="naVidaReal">Na vida real</h2>
+      <p class="lead" id="vidaLead"></p>
+      <p class="vida-nota" id="vidaNota" hidden data-t="vidaNota">Nos filmes, o desenho é 3D; aqui o estilo é o mesmo, desenhado em 2D.</p>
+    </div>
+    <div class="filmes" id="filmes"></div>
+  </section>
+  <section class="receita" aria-labelledby="comoFazer">
+    <div>
+      <h2 class="titulo" id="comoFazer" data-t="comoFazer">Como fazer</h2>
+      <p class="lead" id="receitaLead"></p>
+    </div>
+    <div class="folha-receita">
+      <div id="receita"></div>
+      <i class="fita" style="left:40px;top:-12px;transform:rotate(-5deg)"></i>
+    </div>
+  </section>
+</main>
+<footer class="rodape">
+  <span data-t="rodapeFeito">Risca &amp; Mexe · código aberto, licença MIT · feito pela FORSTER em Igrejinha, Rio Grande do Sul, Brasil</span>
+  <span data-t="rodapeEstilo">Quer mandar um estilo novo? O passo a passo sai em breve no GitHub.</span>
+  <span class="credito" data-t="rodapeCredito">A receita do pontilhismo usa ideias da skill de pontilhismo de Fernando Araújo (BRABO, licença MIT).</span>
+</footer>
+<script src="itens.js"></script>
+<script src="receitas.js"></script>
+<script src="referencias.js"></script>
+<script src="traducoes.js"></script>
+<script>
+aplicarLingua(LINGUA); aplicarTextos();   // a língua do endereço troca os dados e os textos fixos antes de montar
+const { visuais, movimentos } = window.MI;
+const INTERFACE = [12, 13, 14], CARTAO = [7, 10, 11];   // os movimentos de interface acontecem dentro de um cartão
+const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = s => document.getElementById(s);
+const qid = new URLSearchParams(location.search).get('id') || 'V9';
+let ehV = qid[0] !== 'M', lista = ehV ? visuais : movimentos;
+let it = lista.find(i => i.n > 0 && i.n === +qid.slice(1));
+if (!it) { ehV = true; lista = visuais; it = visuais[8]; }   // endereço errado abre o V9
+const n = it.n, L = ehV ? 'V' : 'M', cod = L + n, outra = ehV ? movimentos : visuais;
+const inter = !ehV && INTERFACE.includes(n), comCartao = ehV && CARTAO.includes(n);
+
+$('capitulo').textContent = ehV ? T.capituloV : T.capituloM;
+$('eixo').textContent = ehV ? T.eixoV : T.eixoM;
+$('numero').textContent = cod;
+$('nome').textContent = it.nome;
+$('oque').textContent = it.oque;
+$('cabe').textContent = it.cabe;
+$('explica').textContent = it.ref ? T.explicaRef : inter ? T.explicaInter : ehV ? T.explicaV + (comCartao ? '' : T.explicaVcartao) : T.explicaM;
+$('nota').textContent = inter ? T.notaInter : ehV ? T.notaV : T.notaM;
+$('nota').hidden = !!it.ref;
+
+// com o que combina: os de interface só com os visuais de cartão (e vice-versa); os sem modelo não abrem na mesa
+$('combinaTitulo').textContent = ehV ? T.combinaV : T.combinaM;
+const opcoes = outra.filter(o => !o.ref && (inter ? CARTAO.includes(o.n) : !(ehV && !comCartao && INTERFACE.includes(o.n))));
+$('chips').innerHTML = opcoes.map(o => `<a class="chip" href="Mesa.html?v=${ehV ? n : o.n}&m=${ehV ? o.n : n}"><b>${ehV ? 'M' : 'V'}${o.n}</b> ${o.nome}</a>`).join('');
+$('combina').hidden = !!it.ref;
+$('abrir').hidden = !!it.ref;
+$('abrirMesa').href = ehV ? `Mesa.html?v=${n}&m=0` : `Mesa.html?v=${inter ? 10 : 1}&m=${n}`;
+
+const video = $('video');
+if (it.arq) { video.autoplay = !calmo; video.preload = calmo ? 'none' : 'auto'; video.poster = `capas/${PASTA}${it.arq}.jpg`; video.src = `v/${PASTA}${it.arq}.mp4`; }
+else { video.hidden = true; $('semModelo').hidden = false; }
+$('legenda').innerHTML = `<b>${cod}</b> · ${it.nome.toLowerCase()}`;
+
+const seq = lista.filter(i => i.n > 0), k = seq.indexOf(it);
+const ant = seq[(k - 1 + seq.length) % seq.length], prox = seq[(k + 1) % seq.length];
+$('ant').href = `Item.html?id=${L}${ant.n}`; $('ant').textContent = `← ${L}${ant.n} ${ant.nome}`;
+$('prox').href = `Item.html?id=${L}${prox.n}`; $('prox').textContent = `${L}${prox.n} ${prox.nome} →`;
+$('pag').textContent = T.pag(k + 1, seq.length);
+document.title = `${cod} ${it.nome} · Risca & Mexe`;
+
+// na vida real: nos movimentos, os filmes em que ele é o principal (m) ou aparece junto (tambem), o principal primeiro;
+// nos visuais, os filmes cujo campo v é este visual (os filmes são 3D; o nosso estilo é o mesmo, desenhado em 2D)
+const FILMES = (window.REFS || {}).filmes || [];
+const naVida = ehV
+  ? FILMES.map((f, i) => ({ f, i, principal: true })).filter(x => x.f.v === n)
+  : FILMES.map((f, i) => ({ f, i, principal: f.m === n })).filter(x => x.principal || (x.f.tambem || []).includes(n)).sort((a, b) => b.principal - a.principal);
+$('vida').hidden = !naVida.length;
+$('vidaLead').textContent = T.vidaLead(cod);
+$('vidaNota').hidden = !ehV;
+const marca = ehV ? T.marcaV : T.marcaM;
+$('filmes').innerHTML = naVida.map(({ f, i, principal }, k) => `
+  <a class="cartao-filme" href="Referencias.html#filme-${i + 1}" style="transform:rotate(${k % 2 ? 1.2 : -1.2}deg)">
+    <span class="quadro"><img src="https://i.ytimg.com/vi/${f.id}/hqdefault.jpg" alt="" loading="lazy"></span>
+    <b>${f.titulo}</b>
+    <span>${f.autor}</span>
+    <em>${principal ? `<mark>${marca}</mark>` : T.apareceJunto} <span class="vm">V${f.v} × M${f.m}</span></em>
+  </a>`).join('');
+
+// como fazer: a receita de receitas.js em lista (os passos numerados ficam dentro do item de cima; as cores ganham uma amostra)
+const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const enfeitar = s => esc(s).replace(/`([^`]+)`/g, '<code>$1</code>').replace(/#[0-9A-Fa-f]{6}\b/g, h => `<span class="cor"><i style="background:${h}"></i>${h}</span>`);
+function receita(txt) {
+  const itens = [];
+  for (const l of txt.split('\n')) {
+    const sub = l.match(/^\s+\d+\.\s+(.*)$/);
+    if (sub && itens.length) itens[itens.length - 1].sub.push(sub[1]);
+    else if (l.startsWith('- ')) itens.push({ t: l.slice(2), sub: [] });
+    else if (l.trim()) itens.push({ t: l.trim(), sub: [], solto: true });
+  }
+  if (itens.every(i => i.solto)) return itens.map(i => `<p class="solta">${enfeitar(i.t)}</p>`).join('');
+  return '<ul class="regras">' + itens.map(i => `<li>${enfeitar(i.t)}${i.sub.length ? '<ol>' + i.sub.map(s => `<li>${enfeitar(s)}</li>`).join('') + '</ol>' : ''}</li>`).join('') + '</ul>';
+}
+const R = (window.RECEITAS || {})[cod];
+$('receitaLead').textContent = it.ref ? T.receitaRef(cod, it.nome) : T.receitaLead(cod, it.nome);
+$('receita').innerHTML = R ? receita(R) : `<p class="solta">${T.semReceita}</p>`;
+linkar();
+</script>
+</body>
+</html>

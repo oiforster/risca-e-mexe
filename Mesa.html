@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-t="tituloMesa">Mesa de combinação · Risca &amp; Mexe</title>
+<meta name="description" content="Um índice aberto de estilos de animação. Toda animação são duas escolhas: como ela é desenhada e como ela se mexe. Escolha uma de cada, veja ao vivo e leve a receita para a IA.">
+<meta property="og:title" content="Risca &amp; Mexe">
+<meta property="og:description" content="Um índice aberto de estilos de animação: escolha como desenhar e como mexer, e veja ao vivo.">
+<meta property="og:image" content="https://riscaemexe.com.br/img/compartilhar.jpg">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="img/icone.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Caveat:wght@500;600&family=Courier+Prime:wght@400;700&display=swap">
+<link rel="stylesheet" href="estilo.css">
+<script src="textos.js"></script>
+<style>
+  /* a mesa: visual à esquerda, movimento à direita, a cena ao vivo no meio, colada na folha laranja */
+  .mesa { position: relative; background: var(--laranja-fundo); overflow: hidden; padding-bottom: 70px; }
+  .cabeca { position: relative; max-width: 1380px; margin: 0 auto; padding: 18px 28px 0; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 20px; }
+  .cabeca h1 { font-size: clamp(46px, 8vw, 124px); }
+  .cabeca p { font-family: var(--f-titulo); font-weight: 800; font-size: 20px; line-height: 1.1; max-width: 300px; margin: 0 0 10px; }
+  .tres { position: relative; max-width: 1380px; margin: 26px auto 0; padding: 0 28px; display: grid; grid-template-columns: 1fr minmax(300px, 380px) 1fr; gap: 34px; align-items: start; }
+  .coluna { background: var(--papel); padding: 18px 18px 22px; box-shadow: 0 10px 28px rgba(26,25,22,.22); position: relative; }
+  .coluna.esq { transform: rotate(-1.2deg); }
+  .coluna.dir { transform: rotate(1deg); }
+  .coluna h2 { font-family: var(--f-titulo); font-weight: 900; font-size: 34px; letter-spacing: -0.03em; margin: 0 0 4px; }
+  .coluna .rotulo { display: block; margin-bottom: 12px; }
+  .lista { display: grid; gap: 2px; }
+  .linha { display: grid; grid-template-columns: 54px 1fr auto; align-items: baseline; gap: 8px; background: none; border: 0; padding: 6px 6px; text-align: left; cursor: pointer; font: inherit; color: inherit; border-bottom: 1px dashed var(--linha); }
+  .linha b { font-family: var(--f-titulo); font-weight: 900; font-size: 22px; letter-spacing: -0.03em; }
+  .linha span { font-family: var(--f-maquina); font-size: 15px; }
+  .linha[aria-pressed="true"] span { background: linear-gradient(transparent 10%, var(--marca) 10%, var(--marca) 90%, transparent 90%); font-weight: 700; }
+  .linha[aria-pressed="true"] b { color: var(--laranja); }
+  .linha:hover span { text-decoration: underline; }
+  /* com um movimento de interface (M12 a M14), os visuais de cartão ganham a marca "combina" */
+  .tag { display: none; font-style: normal; font-family: var(--f-maquina); font-size: 11px; font-weight: 700; line-height: 1.4; background: var(--tinta); color: var(--branco); padding: 1px 6px; align-self: center; }
+  .mesa.interface .tag { display: inline-block; }
+  .meio { position: relative; }
+  .meio .polaroide { position: relative; padding: 12px 12px 44px; transform: rotate(-1.5deg); }
+  .meio .tela { position: relative; width: 100%; aspect-ratio: 9 / 16; background: #111; overflow: hidden; }
+  .meio iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .meio .legenda { font-size: 15px; bottom: 13px; }
+  /* no celular: as escolhas em duas faixas logo abaixo da cena */
+  .compacto { display: none; }
+  .compacto .rotulo { display: block; margin-bottom: 6px; }
+  .faixa { position: relative; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 2px 48px 8px 2px; -webkit-mask-image: linear-gradient(90deg, #000 84%, transparent); mask-image: linear-gradient(90deg, #000 84%, transparent); }
+  .faixa::-webkit-scrollbar { display: none; }
+  .escolha { flex: none; min-height: 44px; display: inline-flex; align-items: center; gap: 7px; padding: 0 12px; font-family: var(--f-maquina); font-size: 14px; color: var(--tinta); background: var(--branco); border: 1.5px solid var(--tinta); cursor: pointer; }
+  .escolha b { font-family: var(--f-titulo); font-weight: 900; font-size: 16px; letter-spacing: -0.02em; }
+  .escolha[aria-pressed="true"] { background: var(--tinta); color: var(--branco); }
+  .escolha[aria-pressed="true"] .tag { background: var(--laranja); color: var(--tinta); }
+  .pedido { margin-top: 26px; text-align: center; position: relative; display: grid; gap: 12px; justify-items: center; }
+  .pedido .par { font-family: var(--f-titulo); font-weight: 900; font-size: 54px; letter-spacing: -0.04em; line-height: .9; }
+  .pedido .frase { font-family: var(--f-maquina); font-size: 15px; }
+  .aviso-cartao { margin: 0; max-width: 320px; font-family: var(--f-maquina); font-size: 14px; line-height: 1.45; text-wrap: balance; }
+  .aviso-cartao button { font: inherit; font-weight: 700; color: inherit; background: none; border: 0; padding: 0; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+  .nota2 { width: 250px; margin: 4px 0 0; transform: rotate(3deg); text-wrap: balance; }
+  /* como usar com IA: os passos à esquerda, a ficha do pedido à direita */
+  .ia { position: relative; max-width: 1380px; margin: 0 auto; padding: 70px 28px 90px; display: grid; grid-template-columns: minmax(280px, 0.9fr) 1.1fr; gap: 56px; align-items: start; }
+  .ia h2 { font-size: clamp(48px, 6vw, 92px); margin-bottom: 26px; }
+  .passos { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; counter-reset: passo; }
+  .passos li { display: grid; grid-template-columns: 64px 1fr; gap: 14px; align-items: start; counter-increment: passo; }
+  .passos li::before { content: counter(passo); font-family: var(--f-titulo); font-weight: 900; font-size: 58px; line-height: .8; color: var(--laranja); letter-spacing: -0.04em; }
+  .passos b { display: block; font-family: var(--f-titulo); font-weight: 800; font-size: 20px; letter-spacing: -0.01em; margin-bottom: 4px; }
+  .passos p { margin: 0; max-width: 46ch; }
+  /* a ficha do pedido é uma pasta com duas abas: a peça do catálogo e o pedido do teu jeito */
+  .pasta { position: relative; transform: rotate(.8deg); min-width: 0; }
+  .abas { position: relative; z-index: 2; display: flex; flex-wrap: wrap; gap: 6px; padding-left: 18px; margin-bottom: -1px; }
+  .aba { min-height: 44px; padding: 11px 18px 10px; font-family: var(--f-maquina); font-weight: 700; font-size: 15px; color: var(--tinta); background: var(--cinza); border: 0; cursor: pointer; box-shadow: 0 -3px 10px rgba(26,25,22,.12); clip-path: inset(-20px -20px 0 -20px); }
+  .aba:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .aba[aria-selected="true"] { background: var(--branco); text-decoration: none; cursor: default; }
+  .ficha { position: relative; background: var(--branco); padding: 26px 28px 30px; box-shadow: 0 14px 34px rgba(26,25,22,.2); }
+  .ficha .campo { display: block; width: 100%; min-height: 112px; resize: vertical; margin: 0; padding: 12px 14px; font-family: var(--f-maquina); font-size: 15px; line-height: 1.5; color: var(--tinta); background: var(--papel); border: 2px solid var(--tinta); border-radius: 0; }
+  .ficha .campo:focus-visible { outline: 3px solid var(--laranja); outline-offset: 2px; }
+  .ficha .caixa { display: flex; align-items: center; gap: 10px; min-height: 44px; margin-top: 8px; font-family: var(--f-maquina); font-size: 15px; cursor: pointer; }
+  .ficha .caixa input { width: 20px; height: 20px; margin: 0; accent-color: var(--tinta); flex: none; }
+  .ficha .aviso-imagem { margin: 4px 0 0; padding: 10px 14px; border: 1.5px dashed var(--tinta); font-family: var(--f-maquina); font-size: 14px; line-height: 1.5; text-wrap: pretty; }
+  .ficha .aviso-imagem code { font-weight: 700; }
+  .ficha .rotulo.depois { margin-top: 26px; }
+  .ficha pre.rolar { max-height: 460px; overflow: auto; padding-right: 10px; scrollbar-width: thin; scrollbar-color: var(--linha) transparent; }
+  .ficha .rotulo { display: block; margin-bottom: 12px; }
+  .ficha pre { margin: 0 0 22px; white-space: pre-wrap; font-family: var(--f-maquina); font-size: 15px; line-height: 1.55; }
+  .ficha pre mark { padding: 0 .15em; }
+  .ficha .botoes { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+  .ficha .aviso { font-size: 13px; color: var(--lapis); max-width: 52ch; margin: 18px 0 0; }
+  .ficha .codigo { display: block; margin-top: 6px; font-family: var(--f-maquina); font-size: 13px; overflow-wrap: anywhere; }
+  .ia .mao.nota3 { margin: 30px 0 0 78px; width: 300px; transform: rotate(-3deg); }
+  @media (max-width: 1000px) { .ia { grid-template-columns: 1fr; } .ia .mao.nota3 { display: none; } }
+  @media (max-width: 480px) {
+    .ia { padding-left: 16px; padding-right: 16px; }
+    .abas { flex-wrap: nowrap; padding-left: 0; }
+    .aba { flex: 1 1 0; padding: 10px 8px; font-size: 13px; line-height: 1.2; text-align: center; }
+    .ficha { padding: 22px 18px 24px; }
+    .pasta .fita-pasta { display: none; }
+  }
+  @media (max-width: 1000px) {
+    .cabeca { grid-template-columns: 1fr; }
+    .cabeca h1 { font-size: min(13vw, 110px); }
+    .tres { grid-template-columns: 1fr; }
+    .meio { width: 100%; max-width: 360px; margin: 0 auto; }
+    .coluna, .nota2 { display: none; }
+    .compacto { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; margin-top: 20px; }
+    .compacto > div { min-width: 0; }
+  }
+</style>
+</head>
+<body class="papel-fundo">
+<section class="mesa">
+  <div class="grao"></div>
+  <header class="topo">
+    <nav><a href="index.html" data-t="navIndice">Índice</a><a href="Mesa.html" aria-current="page" data-t="navMesa">Mesa de combinação</a><a href="Referencias.html" data-t="navRefs">Referências</a><span data-t="navContribuir">Contribuir: em breve no GitHub</span></nav>
+    <div class="linguas" aria-label="Língua" data-ta="aria-label:lingua"><a href="Mesa.html" hreflang="pt-BR" data-lingua="pt" aria-current="true">PT</a><a href="Mesa.html?lang=en" hreflang="en" data-lingua="en">EN</a><a href="Mesa.html?lang=es" hreflang="es" data-lingua="es">ES</a></div>
+  </header>
+  <div class="cabeca">
+    <h1 class="titulo" data-t="mesa">Mesa de combinação</h1>
+    <div><p data-t="mesaLead">Um visual de um lado, um movimento do outro. A cena roda aqui mesmo.</p><p class="mao" data-t="mesaMao" style="font-family:var(--f-mao);font-weight:500;font-size:24px;transform:rotate(-3deg)">clica num de cada lado e a peça muda na hora</p></div>
+  </div>
+  <div class="tres">
+    <div class="coluna esq"><h2 data-t="visual">Visual</h2><span class="rotulo" data-t="comoDesenhado">como é desenhado</span><div class="lista" id="listaV"></div>
+      <i class="fita" style="left:40%;top:-12px;transform:rotate(-4deg)"></i></div>
+    <div class="meio">
+      <div class="polaroide"><div class="tela"><iframe id="cena" title="A combinação rodando" data-ta="title:cenaTitulo"></iframe></div><span class="legenda" id="legenda"></span>
+        <i class="fita" style="left:30px;top:-12px;transform:rotate(-8deg)"></i><i class="fita" style="right:30px;top:-12px;transform:rotate(7deg)"></i></div>
+      <div class="compacto">
+        <div role="group" aria-label="Visual" data-ta="aria-label:visual"><span class="rotulo" data-t="visual">Visual</span><div class="faixa" id="compV"></div></div>
+        <div role="group" aria-label="Movimento" data-ta="aria-label:movimento"><span class="rotulo" data-t="movimento">Movimento</span><div class="faixa" id="compM"></div></div>
+      </div>
+      <div class="pedido">
+        <div class="par" id="par">V9 × M2</div>
+        <div class="frase" id="frase"></div>
+        <p class="aviso-cartao" id="avisoCartao" hidden><span data-t="avisoAntes">O</span> <span id="avisoM">M12</span> <span data-t="avisoMeio">acontece num cartão de interface: combina com</span> <button type="button" data-eixo="v" data-n="7" data-atalho>V7</button>, <button type="button" data-eixo="v" data-n="10" data-atalho>V10</button> <span data-t="ou">ou</span> <button type="button" data-eixo="v" data-n="11" data-atalho>V11</button>.</p>
+        <a class="botao" href="#ia" data-t="levar">Levar esta cena para a IA ↓</a>
+        <p class="mao nota2" data-t="nota2">a cena vira um pedido pronto para colar no Claude, no ChatGPT ou em outra IA</p>
+      </div>
+    </div>
+    <div class="coluna dir"><h2 data-t="movimento">Movimento</h2><span class="rotulo" data-t="comoMexe">como se mexe</span><div class="lista" id="listaM"></div>
+      <i class="fita" style="left:30%;top:-12px;transform:rotate(5deg)"></i></div>
+  </div>
+</section>
+
+<section class="ia papel-fundo" id="ia" aria-label="Como usar com IA" data-ta="aria-label:comoUsar">
+  <div>
+    <h2 class="titulo" data-t="comoUsar">Como usar com IA</h2>
+    <ol class="passos">
+      <li><div><b data-t="passo1t">Escolhe a combinação</b><p data-t="passo1p">Um visual e um movimento na mesa acima. O pedido ao lado muda junto.</p></div></li>
+      <li><div><b id="passo2t" data-t="passo2t">Preenche o teu assunto</b><p id="passo2p" data-t="passo2p">Troca o que está entre colchetes: o que aparece no lugar da estrela, a palavra, o número e as cores da tua marca. Pode escrever do teu jeito.</p></div></li>
+      <li><div><b data-t="passo3t">Cola numa IA que escreve código</b><p id="passo3p" data-t="passo3p">Claude, ChatGPT ou outra. Ela usa o motor aberto do Risca &amp; Mexe e devolve uma página que roda a animação no navegador.</p></div></li>
+      <li><div><b data-t="passo4t">Grava em vídeo</b><p data-t="passo4p">O motor grava a página quadro a quadro, sem tremer nem perder qualidade. O passo a passo está no README do projeto, no GitHub. Para um teste rápido, gravar a tela também serve.</p></div></li>
+    </ol>
+    <p class="mao nota3" data-t="nota3">a IA não precisa saber nada de animação: o pedido já explica tudo para ela</p>
+  </div>
+  <div class="pasta">
+    <div class="abas" role="tablist" aria-label="Dois jeitos de pedir" data-ta="aria-label:doisJeitos">
+      <button class="aba" type="button" role="tab" id="abaCatalogo" aria-controls="painelCatalogo" aria-selected="true" data-t="abaCatalogo">Com a peça do catálogo</button>
+      <button class="aba" type="button" role="tab" id="abaTeu" aria-controls="painelTeu" aria-selected="false" tabindex="-1" data-t="abaTeu">Do teu jeito</button>
+    </div>
+    <div class="ficha">
+      <div role="tabpanel" id="painelCatalogo" aria-labelledby="abaCatalogo">
+        <span class="rotulo" id="fichaTitulo" data-t="pedidoTitulo">O pedido para a IA</span>
+        <pre id="pedidoIA"></pre>
+        <div class="botoes">
+          <button class="botao" id="copiar" type="button" data-t="copiar">Copiar o pedido</button>
+          <button class="botao" id="copiarCodigo" type="button" style="box-shadow:none" data-t="copiarCodigo">Copiar só o código</button>
+        </div>
+        <p class="aviso" data-t="avisoCodigo">"Copiar só o código" é para quem já tem o motor do Risca &amp; Mexe no projeto: é a linha que monta esta cena.</p>
+        <code class="codigo" id="codigo"></code>
+      </div>
+      <div role="tabpanel" id="painelTeu" aria-labelledby="abaTeu" hidden>
+        <label class="rotulo" for="assunto" style="display:block;margin-bottom:10px" data-t="campoRotulo">O que vai aparecer na animação</label>
+        <textarea class="campo" id="assunto" data-ta="placeholder:campoExemplo" placeholder="ex.: o logo da padaria, com a frase &quot;Pão quente às 17h&quot;"></textarea>
+        <label class="caixa"><input type="checkbox" id="comImagem"><span data-t="comImagem">Vou anexar uma imagem (meu logo, uma foto)</span></label>
+        <p class="aviso-imagem" id="avisoImagem" hidden data-th="avisoImagem">Com imagem: a página que a IA devolver tem um botão "Escolher imagem". Para ela carregar a imagem sozinha, salva o arquivo como <code>logo.png</code> na mesma pasta da página e abre a página por um servidor local. Aberta com dois cliques, o navegador bloqueia a imagem.</p>
+        <span class="rotulo depois" data-t="pedidoTitulo">O pedido para a IA</span>
+        <pre class="rolar" id="pedidoTeu" tabindex="0"></pre>
+        <div class="botoes">
+          <button class="botao" id="copiarTeu" type="button" data-t="copiar">Copiar o pedido</button>
+        </div>
+      </div>
+    </div>
+    <i class="fita fita-pasta" style="right:36px;top:30px;transform:rotate(4deg);z-index:3"></i>
+  </div>
+</section>
+
+<footer class="rodape">
+  <span data-t="rodapeFeito">Risca &amp; Mexe · código aberto, licença MIT · feito pela FORSTER em Igrejinha, Rio Grande do Sul, Brasil</span>
+  <span data-t="rodapeEstilo">Quer mandar um estilo novo? O passo a passo sai em breve no GitHub.</span>
+  <span class="credito" data-t="rodapeCredito">A receita do pontilhismo usa ideias da skill de pontilhismo de Fernando Araújo (BRABO, licença MIT).</span>
+</footer>
+
+<script src="itens.js"></script>
+<script src="receitas.js"></script>
+<script src="traducoes.js"></script>
+<script>
+aplicarLingua(LINGUA); aplicarTextos();   // a língua do endereço troca os dados, as receitas e os textos fixos antes de montar
+const { visuais, movimentos } = window.MI;
+const $ = s => document.getElementById(s);
+const V_OK = visuais.filter(i => !i.ref), M_OK = movimentos.filter(i => !i.ref);
+const INTERFACE = [12, 13, 14], CARTAO = [7, 10, 11];   // os movimentos de interface acontecem dentro de um cartão
+const q = new URLSearchParams(location.search);
+const ler = (k, ok, padrao) => { const x = q.get(k); return x !== null && x !== '' && ok.some(i => i.n === +x) ? +x : padrao; };
+let sv = ler('v', V_OK, 9), sm = ler('m', M_OK, 2);   // número que não existe no endereço abre o V9 × M2
+
+// as mesmas escolhas em dois formatos: as listas das colunas (tela larga) e as faixas compactas (celular)
+function botoes(itens, eixo, letra, compacto) {
+  return itens.map(i => {
+    const tag = eixo === 'v' && CARTAO.includes(i.n) ? `<em class="tag">${T.combinaTag}</em>` : '';
+    return compacto
+      ? `<button class="escolha" type="button" data-eixo="${eixo}" data-n="${i.n}"><b>${letra}${i.n}</b>${i.nome}${tag}</button>`
+      : `<button class="linha" type="button" data-eixo="${eixo}" data-n="${i.n}"><b>${letra}${i.n}</b><span>${i.nome}</span>${tag}</button>`;
+  }).join('');
+}
+$('listaV').innerHTML = botoes(V_OK, 'v', 'V'); $('listaM').innerHTML = botoes(M_OK, 'm', 'M');
+$('compV').innerHTML = botoes(V_OK, 'v', 'V', true); $('compM').innerHTML = botoes(M_OK, 'm', 'M', true);
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-eixo]'); if (!b) return;
+  if (b.dataset.eixo === 'v') sv = +b.dataset.n; else sm = +b.dataset.n;
+  atualizar();
+});
+
+function atualizar() {
+  const v = visuais.find(i => i.n === sv), m = movimentos.find(i => i.n === sm), inter = INTERFACE.includes(sm);
+  document.querySelectorAll('[data-eixo]:not([data-atalho])').forEach(b => b.setAttribute('aria-pressed', +b.dataset.n === (b.dataset.eixo === 'v' ? sv : sm)));
+  document.querySelector('.mesa').classList.toggle('interface', inter);
+  $('avisoM').textContent = `M${sm}`;
+  $('avisoCartao').hidden = !inter || CARTAO.includes(sv);
+  $('cena').src = `cena/combinar.html?v=${sv}&m=${sm}${LINGUA === 'pt' ? '' : '&lang=' + LINGUA}`;   // o motor troca a palavra e o jeito de escrever o número
+  $('par').textContent = `V${sv} × M${sm}`;
+  $('frase').textContent = T.frase(v.nome, minusc(m.nome));
+  $('legenda').innerHTML = `<b>V${sv} × M${sm}</b> · ${T.aoVivo}`;
+  const p = new URLSearchParams({ v: sv, m: sm }); if (LINGUA !== 'pt') p.set('lang', LINGUA);
+  history.replaceState(null, '', `?${p}${location.hash}`); marcarLinguas();
+  $('pedidoIA').innerHTML = pedido(v, m, true);
+  $('codigo').textContent = codigo();
+  $('pedidoTeu').innerHTML = pedidoTeu(true);
+  document.querySelectorAll('.faixa').forEach(f => {   // a escolha marcada fica à vista na faixa
+    const b = f.querySelector('[aria-pressed="true"]');
+    if (b && f.offsetParent) f.scrollTo({ left: b.offsetLeft - (f.clientWidth - b.offsetWidth) / 2, behavior: 'smooth' });
+  });
+}
+
+// o pedido que vai para a IA: explica o estilo, os campos do motor e deixa o assunto para preencher (os textos estão em textos.js)
+const MOTOR = 'github.com/oiforster/risca-e-mexe';
+const CODIGO_EXTRA = { m12: 'pedido: "..."', m13: 'arquivo: "..."', m14: 'passos: [...]', v11: 'resultado: "..."' };
+const LINGUA_MOTOR = LINGUA === 'pt' ? '' : `, lingua: "${LINGUA}"`;   // em inglês e espanhol, a cena sai com os textos e o número da língua
+const descrever = s => s.charAt(0).toLowerCase() + s.slice(1).replace(/\.$/, '');
+function pedido(v, m, marcar) {
+  const P = T.pedido, c = t => marcar ? `<mark>${t}</mark>` : t, linha = ([r, x]) => `${r} ${c(x)}`;
+  const ks = [m.n === 3 && 'm3', m.n === 12 && 'm12', m.n === 13 && 'm13', m.n === 14 && 'm14', v.n === 11 && 'v11'].filter(Boolean);
+  return [
+    P.abre(P.duracao[m.n] || P.duracao.padrao),
+    `${P.visual} V${v.n} ${v.nome} (${descrever(v.oque)})`,
+    `${P.movimento} M${m.n} ${m.nome} (${descrever(m.oque)}).`,
+    '',
+    P.motor(MOTOR),
+    `Catalogo.montar({ visual: ${v.n}, movimento: ${m.n}${LINGUA_MOTOR}, palavra: "...", valor: ...${ks.filter(k => CODIGO_EXTRA[k]).map(k => ', ' + CODIGO_EXTRA[k]).join('')} });`,
+    '',
+    P.campos,
+    ...P.base,
+    ...ks.map(k => P[k][0]),
+    '',
+    P.troque,
+    ...P.assunto.map(linha),
+    ...ks.filter(k => P[k].length > 1).map(k => linha(P[k].slice(1))),
+    linha(P.cores),
+    '',
+    ...P.fim,
+  ].join('\n');
+}
+const codigo = () => `Catalogo.montar({ visual: ${sv}, movimento: ${sm}${LINGUA_MOTOR} });`;
+
+// o pedido do teu jeito (receitas.js): a pessoa descreve o assunto e o pedido muda enquanto ela escreve
+const VAZIO = (((window.TRADUCOES || {})[LINGUA] || {}).pedido || {}).vazio || '[descreva aqui o que deve aparecer]';
+const esc = s => s.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+function pedidoTeu(marcar) {
+  const v = visuais.find(i => i.n === sv), m = movimentos.find(i => i.n === sm), assunto = $('assunto').value.trim();
+  const p = window.pedidoAberto({ v: sv, m: sm, nomeV: v.nome, nomeM: m.nome, assunto, comImagem: $('comImagem').checked, segundos: T.pedido.segundos[sm] || T.pedido.segundos.padrao });
+  if (!marcar) return p;
+  const alvo = assunto || VAZIO, i = p.indexOf(alvo);   // o assunto fica marcado, como os colchetes do outro pedido
+  return i < 0 ? esc(p) : esc(p.slice(0, i)) + '<mark>' + esc(alvo) + '</mark>' + esc(p.slice(i + alvo.length));
+}
+$('assunto').addEventListener('input', () => $('pedidoTeu').innerHTML = pedidoTeu(true));
+$('comImagem').addEventListener('change', e => { $('avisoImagem').hidden = !e.target.checked; $('pedidoTeu').innerHTML = pedidoTeu(true); });
+
+// as abas; os passos 2 e 3 mudam junto
+const PASSOS = {
+  abaCatalogo: [T.passo2t, T.passo2p, T.passo3p],
+  abaTeu: [T.passo2tTeu, T.passo2pTeu, T.passo3pTeu],
+};
+const abas = [...document.querySelectorAll('[role="tab"]')];
+function abrirAba(aba, foco) {
+  abas.forEach(a => { const sim = a === aba; a.setAttribute('aria-selected', sim); a.tabIndex = sim ? 0 : -1; $(a.getAttribute('aria-controls')).hidden = !sim; });
+  const [t, p2, p3] = PASSOS[aba.id]; $('passo2t').textContent = t; $('passo2p').textContent = p2; $('passo3p').textContent = p3;
+  if (foco) aba.focus();
+}
+abas.forEach((a, i) => {
+  a.addEventListener('click', () => abrirAba(a));
+  a.addEventListener('keydown', e => { const d = { ArrowRight: 1, ArrowLeft: -1 }[e.key]; if (d) { e.preventDefault(); abrirAba(abas[(i + d + abas.length) % abas.length], true); } });
+});
+
+// a cena pausa quando sai da tela (o motor ouve postMessage({ pausar: true }) e ({ pausar: false }))
+let naTela = true;
+function avisarCena(tentativas = 80) {
+  const w = $('cena').contentWindow; let pronta = true;
+  try { pronta = !!(w && w.cena); } catch (e) {}
+  if (pronta && w) w.postMessage({ pausar: !naTela }, '*');
+  else if (tentativas > 0) setTimeout(() => avisarCena(tentativas - 1), 150);   // o motor só ouve depois de carregar as fontes
+}
+new IntersectionObserver(([e]) => { naTela = e.isIntersecting; avisarCena(); }).observe($('cena'));
+$('cena').addEventListener('load', () => avisarCena());
+
+atualizar();
+
+async function copiar(botao, texto, alvo, rotulo) {
+  try { await navigator.clipboard.writeText(texto); botao.textContent = T.copiado; }
+  catch (e) { const r = document.createRange(); r.selectNodeContents(alvo); getSelection().removeAllRanges(); getSelection().addRange(r); botao.textContent = T.selecionado; }
+  setTimeout(() => botao.textContent = rotulo, 2200);
+}
+$('copiar').addEventListener('click', e => copiar(e.currentTarget, pedido(visuais.find(i => i.n === sv), movimentos.find(i => i.n === sm), false), $('pedidoIA'), T.copiar));
+$('copiarCodigo').addEventListener('click', e => copiar(e.currentTarget, codigo(), $('codigo'), T.copiarCodigo));
+$('copiarTeu').addEventListener('click', e => copiar(e.currentTarget, pedidoTeu(false), $('pedidoTeu'), T.copiar));
+linkar();
+</script>
+</body>
+</html>
