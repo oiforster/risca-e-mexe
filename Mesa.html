@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title data-t="tituloMesa">Mesa de combinação · Risca &amp; Mexe</title>
@@ -94,6 +95,16 @@
     .aba { flex: 1 1 0; padding: 10px 8px; font-size: 13px; line-height: 1.2; text-align: center; }
     .ficha { padding: 22px 18px 24px; }
     .pasta .fita-pasta { display: none; }
+  }
+  /* celular (até 600 px): os botões de copiar no alto da ficha, logo abaixo das abas; o texto do pedido numa caixa de altura
+     limitada que rola por dentro */
+  @media (max-width: 600px) {
+    .ficha [role="tabpanel"] { display: flex; flex-direction: column; }
+    .ficha [role="tabpanel"][hidden] { display: none; }
+    .ficha .botoes { order: -1; margin-bottom: 18px; }
+    .ficha pre { max-height: min(420px, 55vh); overflow: auto; padding: 12px 14px; border: 1.5px dashed var(--linha); background: var(--papel); scrollbar-width: thin; }
+    .ficha .rotulo.depois { margin-top: 22px; }
+    .meio .legenda { left: 8px; right: 8px; white-space: nowrap; overflow: hidden; font-size: 12px; }
   }
   @media (max-width: 1000px) {
     .cabeca { grid-template-columns: 1fr; }
@@ -228,17 +239,27 @@ function atualizar() {
   $('cena').src = `cena/combinar.html?v=${sv}&m=${sm}${LINGUA === 'pt' ? '' : '&lang=' + LINGUA}`;   // o motor troca a palavra e o jeito de escrever o número
   $('par').textContent = `V${sv} × M${sm}`;
   $('frase').textContent = T.frase(v.nome, minusc(m.nome));
-  $('legenda').innerHTML = `<b>V${sv} × M${sm}</b> · ${T.aoVivo}`;
+  $('legenda').innerHTML = `<b>V${sv} × M${sm}</b><span class="resto"> · ${T.aoVivo}</span>`;
+  ajustarLegendas();
   const p = new URLSearchParams({ v: sv, m: sm }); if (LINGUA !== 'pt') p.set('lang', LINGUA);
   history.replaceState(null, '', `?${p}${location.hash}`); marcarLinguas();
   $('pedidoIA').innerHTML = pedido(v, m, true);
   $('codigo').textContent = codigo();
   $('pedidoTeu').innerHTML = pedidoTeu(true);
-  document.querySelectorAll('.faixa').forEach(f => {   // a escolha marcada fica à vista na faixa
+  centrarFaixas(true);
+}
+// a escolha marcada fica à vista nas duas faixas; de novo, sem animação, quando as fontes carregam (as larguras mudam)
+function centrarFaixas(suave) {
+  document.querySelectorAll('.faixa').forEach(f => {
     const b = f.querySelector('[aria-pressed="true"]');
-    if (b && f.offsetParent) f.scrollTo({ left: b.offsetLeft - (f.clientWidth - b.offsetWidth) / 2, behavior: 'smooth' });
+    if (!b || !f.offsetParent) return;
+    const util = f.clientWidth - 48;   // a faixa tem 48 px de respiro à direita, sob o esmaecido
+    const alvo = b.offsetWidth >= util ? b.offsetLeft - 2 : b.offsetLeft - (util - b.offsetWidth) / 2;   // um botão mais largo que a faixa encosta à esquerda
+    f.scrollTo({ left: Math.max(0, alvo), behavior: suave ? 'smooth' : 'auto' });
   });
 }
+document.fonts.ready.then(() => centrarFaixas(false));
+addEventListener('load', () => centrarFaixas(false));
 
 // o pedido que vai para a IA: explica o estilo, os campos do motor e deixa o assunto para preencher (os textos estão em textos.js)
 const MOTOR = 'github.com/oiforster/risca-e-mexe';

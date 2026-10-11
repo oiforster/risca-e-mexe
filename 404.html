@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-t="titulo404">Página não encontrada · Risca &amp; Mexe</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="img/icone.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Caveat:wght@500;600&family=Courier+Prime:wght@400;700&display=swap">
+<!-- os arquivos do site: primeiro na pasta do endereço (funciona aberta direto ou no servidor); se o endereço errado tiver pastas, na raiz do site -->
+<link rel="stylesheet" href="estilo.css" onerror="this.onerror=null;this.href='/estilo.css'">
+<script src="textos.js" onerror="document.write('<script src=\'/textos.js\'><\/script>')"></script>
+<style>
+  /* a página que o servidor mostra para um endereço errado */
+  html, body { min-height: 100%; }
+  .perdida { position: relative; overflow: hidden; background: var(--laranja-fundo); min-height: 100vh; display: flex; flex-direction: column; }
+  .perdida .palco { position: relative; flex: 1; max-width: 1380px; width: 100%; margin: 0 auto; padding: 40px 28px 80px; display: grid; align-content: center; gap: 22px; }
+  .perdida .num { font-size: clamp(120px, 22vw, 300px); line-height: .8; }
+  .perdida h1 { font-size: clamp(44px, 7vw, 110px); text-wrap: balance; max-width: 14ch; }
+  .perdida p { max-width: 44ch; margin: 0; font-family: var(--f-titulo); font-weight: 800; font-size: 20px; line-height: 1.2; }
+  .perdida .acoes { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 10px; }
+  .perdida .botao { min-height: 44px; display: inline-flex; align-items: center; }
+  .perdida .retalho { z-index: 0; }
+  .perdida .palco > * { position: relative; z-index: 1; }
+  .perdida .mao { color: var(--tinta); font-size: 26px; max-width: 300px; transform: rotate(-3deg); margin-top: 8px; }
+  @media (max-width: 600px) { .perdida .palco { padding: 24px 16px 60px; } .perdida .mao { font-size: 22px; } }
+</style>
+</head>
+<body>
+<section class="perdida" aria-label="Página não encontrada" data-ta="aria-label:naoEncontrada">
+  <div class="grao"></div>
+  <header class="topo">
+    <nav><a href="index.html" data-t="navIndice">Índice</a><a href="Mesa.html" data-t="navMesa">Mesa de combinação</a><a href="Referencias.html" data-t="navRefs">Referências</a><a href="https://github.com/oiforster/risca-e-mexe" data-t="navContribuir">Contribuir no GitHub</a></nav>
+    <div class="linguas" aria-label="Língua" data-ta="aria-label:lingua"><a href="404.html" hreflang="pt-BR" data-lingua="pt" aria-current="true">PT</a><a href="404.html?lang=en" hreflang="en" data-lingua="en">EN</a><a href="404.html?lang=es" hreflang="es" data-lingua="es">ES</a></div>
+  </header>
+  <div class="palco">
+    <div class="retalho quadriculado" style="position:absolute;left:55%;top:8%;width:360px;height:260px;transform:rotate(3deg)"></div>
+    <div class="retalho pontilhado" style="position:absolute;left:68%;top:52%;width:300px;height:180px;transform:rotate(-4deg)"></div>
+    <div class="titulo num" aria-hidden="true">404</div>
+    <h1 class="titulo" data-t="naoEncontrada">Página não encontrada</h1>
+    <p data-t="naoEncontradaFrase">Esse endereço não existe ou mudou de lugar. O catálogo continua aqui:</p>
+    <div class="acoes"><a class="botao" href="index.html" data-t="irIndice">Ir para o índice</a><a class="botao" href="Mesa.html" data-t="irMesa">Abrir a mesa de combinação</a></div>
+  </div>
+</section>
+<script src="traducoes.js" onerror="document.write('<script src=\'/traducoes.js\'><\/script>')"></script>
+<script>
+aplicarLingua(LINGUA); aplicarTextos(); linkar();
+// os links saem da mesma pasta de onde o estilo carregou (a raiz do site, quando o endereço errado tem pastas)
+const RAIZ = document.querySelector('link[href$="estilo.css"]').href.replace(/estilo\.css$/, '');
+document.querySelectorAll('a[href]').forEach(a => { const h = a.getAttribute('href'); if (!/^(https?:)?\/\//.test(h) && !h.startsWith('/')) a.href = RAIZ + h; });
+</script>
+</body>
+</html>

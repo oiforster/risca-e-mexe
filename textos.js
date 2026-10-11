@@ -68,7 +68,7 @@
       levar: 'Levar esta cena para a IA ↓',
       nota2: 'a cena vira um pedido pronto para colar no Claude, no ChatGPT ou em outra IA',
       comoUsar: 'Como usar com IA',
-      passo1t: 'Escolhe a combinação', passo1p: 'Um visual e um movimento na mesa acima. O pedido ao lado muda junto.',
+      passo1t: 'Escolhe a combinação', passo1p: 'Um visual e um movimento na mesa acima. O pedido muda junto.',
       passo2t: 'Preenche o teu assunto', passo2p: 'Troca o que está entre colchetes: o que aparece no lugar da estrela, a palavra, o número e as cores da tua marca. Pode escrever do teu jeito.',
       passo2tTeu: 'Descreve o teu assunto', passo2pTeu: 'Escreve no campo ao lado o que deve aparecer: o produto, o logo, uma frase, um número. Se for usar uma imagem, marca a caixa e anexa a imagem junto com o pedido.',
       passo3t: 'Cola numa IA que escreve código',
@@ -119,6 +119,11 @@
       faltaRotulo: 'O que ainda falta no catálogo', faltaH2: 'O que esses filmes fazem e o catálogo ainda não tem',
       faltaLead: 'Movimentos que aparecem nas referências e ainda não viraram item do Risca & Mexe. Cada um pode virar um M novo, feito por nós ou por quem quiser contribuir.',
       apareceEm: 'Aparece em:',
+      verMomentos: n => `ver os ${n} momentos`,
+      // página não encontrada
+      titulo404: 'Página não encontrada · Risca & Mexe', naoEncontrada: 'Página não encontrada',
+      naoEncontradaFrase: 'Esse endereço não existe ou mudou de lugar. O catálogo continua aqui:',
+      irIndice: 'Ir para o índice', irMesa: 'Abrir a mesa de combinação',
     },
 
     en: {
@@ -170,7 +175,7 @@
       levar: 'Take this scene to an AI ↓',
       nota2: 'the scene becomes a ready-made prompt to paste into Claude, ChatGPT or another AI',
       comoUsar: 'How to use it with AI',
-      passo1t: 'Pick the combination', passo1p: 'A visual and a motion on the table above. The prompt next to it changes with them.',
+      passo1t: 'Pick the combination', passo1p: 'A visual and a motion on the table above. The prompt changes with them.',
       passo2t: 'Fill in your subject', passo2p: 'Replace what is in brackets: what appears in place of the star, the word, the number and your brand colors. You can write it your own way.',
       passo2tTeu: 'Describe your subject', passo2pTeu: 'Write in the field next to it what should appear: the product, the logo, a sentence, a number. If you are using an image, check the box and attach the image along with the prompt.',
       passo3t: 'Paste it into an AI that writes code',
@@ -220,6 +225,10 @@
       faltaRotulo: 'What the catalog is still missing', faltaH2: 'What these films do that the catalog does not have yet',
       faltaLead: 'Motions that appear in the references and have not yet become Risca & Mexe items. Each one can become a new M, made by us or by anyone who wants to contribute.',
       apareceEm: 'Appears in:',
+      verMomentos: n => `see the ${n} moments`,
+      titulo404: 'Page not found · Risca & Mexe', naoEncontrada: 'Page not found',
+      naoEncontradaFrase: 'This address does not exist or has moved. The catalog is still here:',
+      irIndice: 'Go to the index', irMesa: 'Open the combination table',
     },
 
     es: {
@@ -271,7 +280,7 @@
       levar: 'Llevar esta escena a la IA ↓',
       nota2: 'la escena se vuelve un pedido listo para pegar en Claude, en ChatGPT o en otra IA',
       comoUsar: 'Cómo usarlo con IA',
-      passo1t: 'Elige la combinación', passo1p: 'Un visual y un movimiento en la mesa de arriba. El pedido de al lado cambia junto.',
+      passo1t: 'Elige la combinación', passo1p: 'Un visual y un movimiento en la mesa de arriba. El pedido cambia junto.',
       passo2t: 'Completa tu tema', passo2p: 'Cambia lo que está entre corchetes: lo que aparece en lugar de la estrella, la palabra, el número y los colores de tu marca. Puedes escribirlo a tu manera.',
       passo2tTeu: 'Describe tu tema', passo2pTeu: 'Escribe en el campo de al lado lo que debe aparecer: el producto, el logo, una frase, un número. Si vas a usar una imagen, marca la casilla y adjunta la imagen junto con el pedido.',
       passo3t: 'Pégalo en una IA que escriba código',
@@ -321,6 +330,10 @@
       faltaRotulo: 'Lo que todavía falta en el catálogo', faltaH2: 'Lo que hacen estos videos y el catálogo todavía no tiene',
       faltaLead: 'Movimientos que aparecen en las referencias y todavía no son ítems de Risca & Mexe. Cada uno puede convertirse en un M nuevo, hecho por nosotros o por quien quiera contribuir.',
       apareceEm: 'Aparece en:',
+      verMomentos: n => `ver los ${n} momentos`,
+      titulo404: 'Página no encontrada · Risca & Mexe', naoEncontrada: 'Página no encontrada',
+      naoEncontradaFrase: 'Esta dirección no existe o cambió de lugar. El catálogo sigue aquí:',
+      irIndice: 'Ir al índice', irMesa: 'Abrir la mesa de combinación',
     },
   };
   window.TEXTOS = TEXTOS;
@@ -365,4 +378,17 @@
   window.linkar = function () {
     document.querySelectorAll('a[href]').forEach(a => { if (!a.closest('.linguas')) a.setAttribute('href', comLingua(a.getAttribute('href'))); });
   };
+
+  // celular: a legenda de uma polaroide fica numa linha só; quando o texto não cabe na largura do cartão, fica só o número
+  // (o .resto some). Roda depois das fontes e a cada mudança de tamanho; no computador não muda nada.
+  window.ajustarLegendas = function () {
+    const celular = matchMedia('(max-width: 600px)').matches;
+    document.querySelectorAll('.polaroide .legenda').forEach(l => {
+      l.classList.remove('so-numero');
+      if (celular && l.querySelector('.resto') && l.scrollWidth > l.clientWidth + 1) l.classList.add('so-numero');
+    });
+  };
+  document.fonts.ready.then(() => window.ajustarLegendas());
+  addEventListener('resize', () => window.ajustarLegendas());
+  addEventListener('load', () => window.ajustarLegendas());
 })();

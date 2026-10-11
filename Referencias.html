@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title data-t="tituloRefs">Da referência ao código · Risca &amp; Mexe</title>
@@ -35,6 +36,9 @@
   .tela button span { font-family: var(--f-maquina); font-weight: 700; font-size: 15px; background: var(--branco); color: var(--tinta); padding: 10px 16px; border: 2px solid var(--tinta); box-shadow: 4px 4px 0 var(--tinta); }
   .credito-filme { margin-top: 12px; font-family: var(--f-maquina); font-size: 13.5px; line-height: 1.45; }
   .credito-filme a { text-underline-offset: 3px; }
+  .credito-filme .curto { display: none; }
+  .dobra > summary { display: none; }
+  .dobra[open] > summary { display: none; }
   .leitura { padding: 24px 28px 28px; display: grid; gap: 14px; align-content: start; min-width: 0; }
   .leitura .n { font-weight: 800; font-size: 13px; }
   .leitura h2 { font-family: var(--f-titulo); font-weight: 900; font-size: 30px; letter-spacing: -0.03em; line-height: 1; margin: 0; }
@@ -63,6 +67,20 @@
     .folha { grid-template-columns: 1fr; transform: none !important; }
     .filme { border-right: 0; border-bottom: 1px solid #e3ded2; }
     .par b { font-size: 42px; }
+  }
+  /* celular (até 600 px): os momentos de cada filme ficam fechados ("ver os 5 momentos") e abrem com um toque; o crédito numa linha curta */
+  @media (max-width: 600px) {
+    .lista { padding: 30px 14px 20px; gap: 30px; }
+    .filme { padding: 14px; }
+    .leitura { padding: 18px 16px 22px; gap: 12px; }
+    .credito-filme { margin-top: 10px; }
+    .credito-filme .longo { display: none; }
+    .credito-filme .curto { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .dobra > summary, .dobra[open] > summary { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 2px; font-family: var(--f-maquina); font-weight: 700; font-size: 14px; cursor: pointer; list-style: none; border-bottom: 1px dashed var(--linha); }
+    .dobra > summary::-webkit-details-marker { display: none; }
+    .dobra > summary::before { content: '+'; font-family: var(--f-titulo); font-weight: 900; font-size: 22px; color: var(--laranja); width: 18px; }
+    .dobra[open] > summary::before { content: '−'; }
+    .momentos button { min-height: 44px; }
   }
 </style>
 </head>
@@ -104,6 +122,7 @@ aplicarLingua(LINGUA); aplicarTextos();   // antes de ler os dados: o aplicarLin
 const { visuais, movimentos } = window.MI, { filmes, faltam } = window.REFS;
 const nomeV = n => (visuais.find(i => i.n === n) || {}).nome, nomeM = n => (movimentos.find(i => i.n === n) || {}).nome;
 const tempo = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+const celular = matchMedia('(max-width: 600px)');   // no celular os momentos começam fechados; no computador ficam sempre abertos
 
 document.getElementById('lista').innerHTML = filmes.map((f, i) => `
   <article class="folha" id="filme-${i + 1}">
@@ -112,7 +131,7 @@ document.getElementById('lista').innerHTML = filmes.map((f, i) => `
         <img src="https://i.ytimg.com/vi/${f.id}/hqdefault.jpg" alt="" loading="lazy">
         <button type="button" data-ini="0"><span>${T.tocar}</span></button>
       </div>
-      <p class="credito-filme">${f.titulo} · ${f.autor}<br>${T.noCanal(f.canal)}${f.motionIndex ? ` · ${T.encontradoNo} <a href="https://www.motionindex.io/" target="_blank" rel="noopener">Motion Index</a>` : ''}</p>
+      <p class="credito-filme"><span class="longo">${f.titulo} · ${f.autor}<br>${T.noCanal(f.canal)}${f.motionIndex ? ` · ${T.encontradoNo} <a href="https://www.motionindex.io/" target="_blank" rel="noopener">Motion Index</a>` : ''}</span><span class="curto">${f.autor} · YouTube</span></p>
     </div>
     <div class="leitura">
       <span class="n">${T.refN(i + 1, filmes.length)}</span>
@@ -120,10 +139,14 @@ document.getElementById('lista').innerHTML = filmes.map((f, i) => `
       <div class="par"><b>V${f.v} × M${f.m}</b><span>${T.frase(nomeV(f.v), minusc(nomeM(f.m)))}</span></div>
       <p>${f.diz}</p>
       ${f.tambem && f.tambem.length ? `<div class="tambem">${T.tambem} ${f.tambem.map(n => `<a class="chip" href="Item.html?id=M${n}"><b>M${n}</b> ${nomeM(n)}</a>`).join('')}</div>` : ''}
+      <details class="dobra"${celular.matches ? '' : ' open'}><summary>${T.verMomentos(f.momentos.length)}</summary>
       <ul class="momentos">${f.momentos.map(([s, t]) => `<li><button type="button" data-ini="${s}"><b>${tempo(s)}</b><span>${t}</span></button></li>`).join('')}</ul>
+      </details>
       <div class="acoes"><a class="botao" href="Mesa.html?v=${f.v}&m=${f.m}">${T.abrirNaMesa(`V${f.v} × M${f.m}`)}</a></div>
     </div>
   </article>`).join('');
+// mudando de tamanho (girar o celular, redimensionar), os momentos abrem no computador e fecham no celular
+celular.addEventListener('change', e => document.querySelectorAll('.dobra').forEach(d => { d.open = !e.matches; }));
 
 document.getElementById('faltam').innerHTML = faltam.map(x => `<div><h3>${x.nome}</h3><p>${x.oque}</p><small>${T.apareceEm} ${x.visto}</small></div>`).join('');
 

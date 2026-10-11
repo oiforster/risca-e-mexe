@@ -66,6 +66,16 @@
     .capa .etiqueta { margin-top: 26px; }
     .capitulo { grid-template-columns: 1fr; }
   }
+  /* celular (até 600 px): a colagem mais baixa (polaroides menores, legenda só com o número quando não cabe), para o nome
+     aparecer já na primeira tela, mesmo em 320 px */
+  @media (max-width: 600px) {
+    .capa { --lp: clamp(84px, 22vw, 104px); }
+    .capa .palco { padding-top: calc((var(--lp) - 20px) * 16 / 9 + 86px); }
+    .capa .polaroide { padding-bottom: 30px; }
+    .capa .polaroide .legenda { bottom: 9px; }
+    .capa .nota-capa { font-size: 22px; max-width: 260px; margin-bottom: 14px; }
+    .capa h1 { font-size: clamp(60px, 17vw, 150px); }
+  }
 
   /* celular (até 600 px): cada item vira um cartão com a miniatura 9:16 na largura do cartão e, embaixo, numa linha só, o número em
      laranja e o nome; os cartões em grade de duas colunas; o bloco laranja do capítulo vira uma faixa baixa; a nota à mão fica reta,
@@ -180,9 +190,10 @@ const ALTO_CELULAR = [18, 0, 30, 8];
 document.getElementById('colagem').insertAdjacentHTML('beforeend', CAPA.map(([a, n, x, y, r], i) => `
   <div class="polaroide${i > 3 ? ' extra' : ''}" style="--x:${x};--y:${y}px;--r:${r}deg;--i:${i};--ym:${ALTO_CELULAR[i] || 0}px">
     <video src="v/${PASTA}${a}.mp4" poster="capas/${PASTA}${a}.jpg" muted loop playsinline ${calmo ? 'preload="none"' : 'autoplay'}></video>
-    <span class="legenda"><b>${n}</b> · ${T.legendasCapa[i]}</span>
+    <span class="legenda"><b>${n}</b><span class="resto"> · ${T.legendasCapa[i]}</span></span>
     <i class="fita" style="left:${i % 2 ? 30 : 22}px;top:-12px;transform:rotate(${i % 2 ? 6 : -7}deg)"></i>
   </div>`).join(''));
+ajustarLegendas();
 
 function mini(letra, it, href) {
   if (it.ref) return `<a class="mini ref" href="${href}"><span class="cartaz">${T.semModelo}</span><span class="nome">${it.nome}</span><span class="n">${letra}${it.n}</span></a>`;

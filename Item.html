@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Risca &amp; Mexe · item</title>
@@ -82,6 +83,27 @@
     .cartao-filme { transform: none !important; }
     .folha-receita { padding: 26px 20px 28px; transform: none; }
   }
+  /* celular (até 600 px): a ordem vira número e nome, a polaroide com o vídeo (na faixa laranja), o texto, "Combina com" numa
+     fileira que rola de lado e a navegação. As duas páginas viram uma só (display: contents) e cada pedaço ganha a sua ordem. */
+  @media (max-width: 600px) {
+    .dupla { display: grid; grid-template-columns: minmax(0, 1fr); min-height: 0; padding: 24px 20px 32px; }
+    .pagina, .pagina.laranja { display: contents; }
+    .pagina > .cab { order: 1; margin-bottom: 20px; }
+    .num-grande { order: 2; font-size: clamp(92px, 30vw, 140px); }
+    h1.titulo { order: 3; }
+    .laranja-dentro { order: 4; position: relative; overflow: hidden; background: var(--laranja); margin: 26px -20px 0; padding: 22px 20px 28px; }
+    .laranja-dentro .cab { margin-bottom: 16px; }
+    .texto { order: 5; margin-top: 26px; }
+    .combina { order: 6; margin-top: 34px; }
+    .passa { order: 7; flex-wrap: wrap; }
+    .grande { width: min(250px, 72%); margin-top: 6px; }
+    .grande .polaroide { padding-bottom: 40px; }
+    .grande .legenda { font-size: 12px; bottom: 13px; }
+    .pagina.laranja .nota { margin-top: 22px; }
+    .chips { flex-wrap: nowrap; overflow-x: auto; gap: 8px; margin: 0 -20px; padding: 2px 48px 10px 20px; scrollbar-width: none; -webkit-mask-image: linear-gradient(90deg, #000 86%, transparent); mask-image: linear-gradient(90deg, #000 86%, transparent); }
+    .chips::-webkit-scrollbar { display: none; }
+    .chip { flex: none; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 12px; white-space: nowrap; }
+  }
 </style>
 </head>
 <body class="papel-fundo">
@@ -107,6 +129,7 @@
       <div class="passa"><a id="ant" href="#"></a><a id="prox" href="#"></a></div>
     </section>
     <section class="pagina laranja">
+      <div class="laranja-dentro">
       <div class="grao"></div>
       <div class="cab"><span id="eixo"></span><span id="pag"></span></div>
       <div class="grande">
@@ -115,6 +138,7 @@
       </div>
       <p class="mao nota" id="nota"></p>
       <p class="abrir" id="abrir"><a class="botao" id="abrirMesa" href="Mesa.html" data-t="abrirMesa">Abrir na mesa de combinação</a></p>
+      </div>
     </section>
   </div>
   <section class="vida" id="vida" aria-labelledby="naVidaReal" hidden>
@@ -179,7 +203,8 @@ $('abrirMesa').href = ehV ? `Mesa.html?v=${n}&m=0` : `Mesa.html?v=${inter ? 10 :
 const video = $('video');
 if (it.arq) { video.autoplay = !calmo; video.preload = calmo ? 'none' : 'auto'; video.poster = `capas/${PASTA}${it.arq}.jpg`; video.src = `v/${PASTA}${it.arq}.mp4`; }
 else { video.hidden = true; $('semModelo').hidden = false; }
-$('legenda').innerHTML = `<b>${cod}</b> · ${it.nome.toLowerCase()}`;
+$('legenda').innerHTML = `<b>${cod}</b><span class="resto"> · ${it.nome.toLowerCase()}</span>`;
+ajustarLegendas();
 
 const seq = lista.filter(i => i.n > 0), k = seq.indexOf(it);
 const ant = seq[(k - 1 + seq.length) % seq.length], prox = seq[(k + 1) % seq.length];
