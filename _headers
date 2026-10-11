@@ -1,5 +1,5 @@
 # o navegador confere a versão nova do estilo e dos scripts a cada visita (sem isso a Cloudflare deixa guardar por 4 h)
 /*.css
-  Cache-Control: no-cache
+  Cache-Control: private, max-age=0, must-revalidate
 /*.js
-  Cache-Control: no-cache
+  Cache-Control: private, max-age=0, must-revalidate
