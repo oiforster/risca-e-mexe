@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Risca &amp; Mexe</title>
@@ -64,6 +65,34 @@
     .capa .sub { width: auto; max-width: 340px; margin: 24px 0 0; }
     .capa .etiqueta { margin-top: 26px; }
     .capitulo { grid-template-columns: 1fr; }
+  }
+
+  /* celular (até 600 px): cada item vira um cartão com a miniatura 9:16 na largura do cartão e, embaixo, numa linha só, o número em
+     laranja e o nome; os cartões em grade de duas colunas; o bloco laranja do capítulo vira uma faixa baixa; a nota à mão fica reta,
+     embaixo do título, sem cruzar nada. No computador nada muda. */
+  @media (max-width: 600px) {
+    .indice { padding: 48px 16px 72px; }
+    .indice .largura { gap: 30px; }
+    .abertura { gap: 12px; }
+    .abertura .nota { width: auto; max-width: none; margin: 0; transform: none; font-size: 22px; }
+    .capitulo { gap: 16px; padding-top: 14px; }
+    .capitulo .bloco { min-height: 0; flex-direction: row; flex-wrap: wrap; justify-content: flex-start; align-items: baseline; gap: 2px 12px; padding: 10px 14px 12px; }
+    .capitulo .bloco h3 { font-size: 30px; }
+    .capitulo .bloco span { font-size: 13px; }
+    .miniaturas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 14px; }
+    .miniaturas .mini, .miniaturas .mini.filme { width: auto !important; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: auto auto; gap: 8px; align-items: start; }
+    /* a altura 9:16 vem do padding em % da largura (não do aspect-ratio): na grade, o aspect-ratio esticava a linha da miniatura em até 17 px */
+    .miniaturas .mini .cartaz, .miniaturas .mini.filme .cartaz { grid-column: 1 / 3; grid-row: 1; align-self: start; width: 100%; height: 0; padding: 177.78% 0 0; aspect-ratio: auto; box-shadow: 0 6px 16px rgba(26,25,22,.2); }
+    .miniaturas .mini.filme .cartaz { padding-top: 56.25%; }   /* filme de verdade: a imagem é larga */
+    .miniaturas .mini.ref .cartaz { display: flex; align-items: center; justify-content: center; padding: 88.89% 10px; font-size: 13px; }
+    .miniaturas .mini .n, .miniaturas .mini.filme .n { grid-column: 1; grid-row: 2; align-self: start; font-size: 22px; line-height: 1; color: var(--laranja); }
+    /* o nome desce 6 px para a linha de base dele bater com a do número (alinhar por baseline na grade esticava a linha da miniatura) */
+    .miniaturas .mini .nome { grid-column: 2; grid-row: 2; align-self: start; padding-top: 6px; font-size: 14px; line-height: 1.2; text-align: left; text-wrap: pretty; overflow-wrap: anywhere; }
+    /* combinações e filmes: o número é comprido (V11×M13), então fica numa linha e o nome na de baixo */
+    .miniaturas .mini.combo, .miniaturas .mini.filme { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto; gap: 8px 0; }
+    .miniaturas .mini.combo .cartaz, .miniaturas .mini.filme .cartaz { grid-column: 1; }
+    .miniaturas .mini.combo .n, .miniaturas .mini.filme .n { grid-column: 1; grid-row: 2; margin-bottom: -4px; }
+    .miniaturas .mini.combo .nome, .miniaturas .mini.filme .nome { grid-column: 1; grid-row: 3; padding-top: 0; }
   }
 </style>
 </head>
@@ -162,7 +191,7 @@ function mini(letra, it, href) {
 document.getElementById('indV').innerHTML = visuais.map(v => mini('V', v, `Item.html?id=V${v.n}`)).join('');
 document.getElementById('indM').innerHTML = movimentos.filter(m => m.n > 0).map(m => mini('M', m, `Item.html?id=M${m.n}`)).join('');
 document.getElementById('indX').innerHTML = combinacoes.map(x => `
-  <a class="mini" href="Mesa.html?v=${x.v}&m=${x.m}" style="width:190px"><span class="cartaz"><img src="capas/${PASTA}${x.arq}.jpg" alt="" loading="lazy"></span>
+  <a class="mini combo" href="Mesa.html?v=${x.v}&m=${x.m}" style="width:190px"><span class="cartaz"><img src="capas/${PASTA}${x.arq}.jpg" alt="" loading="lazy"></span>
   <span class="nome">${x.nome}<br><span style="font-weight:400">${x.para}</span></span><span class="n">V${x.v}×M${x.m}</span></a>`).join('');
 // capítulo quatro: os filmes de referências.js, cada um levando para a sua folha na página de referências
 document.getElementById('indR').innerHTML = ((window.REFS || {}).filmes || []).map((f, i) => `
@@ -176,6 +205,18 @@ if (!calmo) document.querySelectorAll('.mini:not(.ref):not(.filme)').forEach(a =
   a.addEventListener('mouseenter', () => { if (a.querySelector('video')) return; const v = document.createElement('video'); Object.assign(v, { src: arq, muted: true, loop: true, playsInline: true, autoplay: true }); a.querySelector('.cartaz').appendChild(v); });
   a.addEventListener('mouseleave', () => { const v = a.querySelector('video'); if (v) v.remove(); });
 });
+// no celular não há mouse: a miniatura toca enquanto está na tela e para quando sai dela (só até 600 px, sem "reduzir movimento")
+if (!calmo && matchMedia('(hover: none) and (max-width: 600px)').matches && 'IntersectionObserver' in window) {
+  const olho = new IntersectionObserver(es => es.forEach(e => {
+    const a = e.target, v = a.querySelector('video');
+    if (!e.isIntersecting) { if (v) v.remove(); return; }
+    if (v) return;
+    const novo = document.createElement('video'); Object.assign(novo, { src: a.dataset.v, muted: true, loop: true, playsInline: true, autoplay: true });
+    novo.setAttribute('muted', ''); novo.setAttribute('playsinline', ''); a.querySelector('.cartaz').appendChild(novo);
+    const p = novo.play(); if (p && p.catch) p.catch(() => {});
+  }), { rootMargin: '15% 0px' });
+  document.querySelectorAll('.mini:not(.ref):not(.filme)').forEach(a => { const img = a.querySelector('img'); if (!img) return; a.dataset.v = img.getAttribute('src').replace('capas/', 'v/').replace('.jpg', '.mp4'); olho.observe(a); });
+}
 linkar();
 </script>
 </body>
