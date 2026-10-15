@@ -25,7 +25,7 @@
   .capa .sub b { display: block; margin-top: 10px; font-family: var(--f-maquina); font-weight: 400; font-size: 14px; letter-spacing: 0; }
   .capa .polaroide { width: 150px; z-index: 2; left: var(--x); top: var(--y); transform: rotate(var(--r)); }
   .capa .polaroide:hover { z-index: 6; }
-  .capa .etiqueta { z-index: 4; left: 18%; top: 700px; transform: rotate(-2deg); }
+  .capa .etiqueta { z-index: 4; left: 18%; top: 700px; transform: rotate(-2deg); min-height: 44px; text-decoration: none; }   /* leva ao Instagram da FORSTER */
   .capa .etiqueta img { height: 18px; width: auto; }
   .seta { position: absolute; z-index: 4; }
   .capa svg.seta { left: 52.5%; top: 688px; }
@@ -134,7 +134,7 @@
     <h1 class="titulo">Risca &amp; Mexe</h1>
     <p class="sub" data-th="sub">Um índice aberto de estilos de animação.<b>Toda animação é duas escolhas: como ela é desenhada e como ela se mexe. Escolhe uma de cada e vê ao vivo.</b></p>
 
-    <div class="etiqueta"><span data-t="etiqueta">um catálogo aberto feito pela</span><img src="img/forster.svg" alt="FORSTER"></div>
+    <a class="etiqueta" href="https://www.instagram.com/somosforster/" target="_blank" rel="noopener"><span data-t="etiqueta">feito pela</span><img src="img/forster.svg" alt="FORSTER"></a>
     <svg class="seta" width="70" height="60" viewBox="0 0 70 60" fill="none" stroke="#2b2925" stroke-width="2" stroke-linecap="round"><path d="M64 48 C 44 44, 20 30, 10 8"/><path d="M4 20 L 9 6 L 22 13"/></svg>
     <p class="mao seta nota-capa" data-t="notaCapa">cada cartão é um estilo, rodando de verdade</p>
   </div>
